@@ -1,0 +1,16 @@
+name: commerce albaran
+description: View commerce order albaran in browser
+core_version_requirement: ^8 || ^9
+type: module
+package: 'Commerce (contrib)'
+dependencies:
+  - commerce:commerce_order
+
+# Information added by Drupal.org packaging script on 2022-03-25
+version: '1.0.0'
+project: 'commerce_albaran'
+datestamp: 1648223650
+
+stylesheets:
+  all:
+    css/commerce_albaran.css: {}

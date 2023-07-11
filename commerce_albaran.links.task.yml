@@ -1,0 +1,5 @@
+commerce_view_albaran:
+  route_name: commerce_view_albaran
+  base_route: entity.commerce_order.canonical
+  title: Albaran
+  weight: 50

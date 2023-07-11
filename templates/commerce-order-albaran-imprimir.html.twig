@@ -1,0 +1,285 @@
+{#
+/**
+ * @file
+ * Template for the order receipt.
+ *
+ * Available variables:
+ * - order_entity: The order entity.
+ * - billing_information: The billing information.
+ * - shipping_information: The shipping information.
+ * - payment_method: The payment method.
+ * - totals: An array of order totals values with the following keys:
+ *   - subtotal: The order subtotal price.
+ *   - adjustments: An array of adjustment totals:
+ *     - type: The adjustment type.
+ *     - label: The adjustment label.
+ *     - total: The adjustment total price.
+ *     - weight: The adjustment weight, taken from the adjustment type.
+ *   - total: The order total price.
+ *
+ * @ingroup themeable
+ */
+#}
+
+<html style="width: 100%">
+<head>
+  <style>
+    @page {
+      size: portrait;
+    }
+    body{
+      font-family: BlinkMacSystemFont,-apple-system,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
+      font-size: 16px;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+    section{
+      width: 100%;
+      height: auto;
+      margin: 0;
+      padding: 0;
+      page-break-inside: avoid;
+    }
+
+    @media print {
+      .no-print {
+        display: none !important;
+      }
+    }
+
+    .line-order-header{
+      font-size: 16px;
+      font-weight: 400;
+      width: 100%;
+    }
+    .line-order-elements-title{
+      font-weight: bold;
+      background-color: #E0E0E0;
+      margin-right: 0;
+      padding-left: 10px;
+      height: 80px;
+      line-height: 40px;
+    }
+    .line-order-title{
+      font-size: 18pt;
+      font-weight: bold;
+      line-height: 1;
+    }
+    .line-order-body{
+      font-size: 0.923em;
+    }
+
+    .table2 {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .table1 {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    table td {
+      height: 15px;
+      border: 1px solid #bebfb9;
+      text-align: justify;
+      padding-left: 5px;
+    }
+    .empty {
+      border: 0px solid black !important;
+    }
+    .title_total {
+      background-color: #E0E0E0;
+      line-height: 30px;
+      text-align: center;
+      font-weight: bold;
+      padding-left: 2px;
+    }
+    .weight {
+      font-weight: bold;
+    }
+    .line_height {
+      line-height: 30px;
+    }
+    thead .title_total{
+      line-height: 20px;
+    }
+    .inline {
+      width: 100%;
+      height: auto;
+      margin-top: 10px;
+      text-align: center;
+    }
+    .child_container {
+      width: 49%;
+      display: inline-block;
+      vertical-align: top;
+    }
+    .right {
+      float: right;
+    }
+    .comentarios_pedidos{
+      width: 100%;
+      text-align: center;
+    }
+    .titulo_comentarios_pedidos{
+      margin-bottom: 7px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+  </style>
+</head>
+<body >
+<section>
+  <img src="https://www.mitortuga.es/themes/custom/belgrade_subtheme/logo.png" width="80px"> <span class="line-order-title"> Albarán Pedido {{ order_entity.getOrderNumber }} - {{ order_entity.created.value|date("d/m/Y") }} </span>
+  <p><span class="weight">Email:</span> {{ order_entity.mail.value }} <span class="right"><span class="weight">Método de pago:</span> {{ order_entity.payment_gateway.value.0.target_id|replace({'_': ' '}) }}</span></p>
+  <div class="inline">
+    <div class="child_container">
+      <table class="table2">
+        <thead class="facturacion-header">
+        <tr class="line-order-elements-title">
+          <td colspan="2" class="title_total">Facturacion</td>
+        </tr>
+        </thead>
+        <tbody class="line-order-body">
+        <tr>
+          <td>
+            Nombre: {{ order_entity.getBillingProfile.address.value.0.given_name }}
+          </td>
+          <td>
+            Codigo de Pais: {{ order_entity.getBillingProfile.address.value.0.country_code }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Apellidos: {{ order_entity.getBillingProfile.address.value.0.family_name }}
+          </td>
+          <td>
+            Teléfono: {{ order_entity.getBillingProfile.phone.value }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Provincia: {{ order_entity.getBillingProfile.address.value.0.administrative_area }}
+          </td>
+          <td>
+            Localidad: {{ order_entity.getBillingProfile.address.value.0.locality }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Dirección: {{ order_entity.getBillingProfile.address.value.0.address_line1 }}{{ order_entity.getBillingProfile.address.value.0.address_line2 }}
+          </td>
+          <td>
+            Cod. Postal: {{ order_entity.getBillingProfile.address.value.0.postal_code }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            CIF: {{ order_entity.getBillingProfile.field_customer_cif.value }}
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="child_container">
+      <table class="table2">
+        <thead class="line-order-header">
+        <tr class="line-order-elements-title">
+          <td colspan="2" class="title_total">Direccion de envio</td>
+        </tr>
+        </thead>
+        <tbody class="envio-body">
+        <tr>
+          <td>
+            Nombre: {{ order_entity.shipments.entity.shipping_profile.entity.address.getValue[0].given_name }}
+          </td>
+          <td>
+            Cod. Pais: {{ order_entity.shipments.entity.shipping_profile.entity.address.getValue[0].country_code }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Apellidos: {{ order_entity.shipments.entity.shipping_profile.entity.address.getValue[0].family_name }}
+          </td>
+          <td>
+            Teléfono: {{ order_entity.shipments.entity.shipping_profile.entity.phone.value }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Provincia: {{ order_entity.shipments.entity.shipping_profile.entity.address.getValue[0].administrative_area }}
+          </td>
+          <td>
+            Localidad: {{ order_entity.shipments.entity.shipping_profile.entity.address.getValue[0].locality }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Dirección: {{ order_entity.shipments.entity.shipping_profile.entity.address.getValue[0].address_line1 }}{{ order_entity.shipments.entity.shipping_profile.entity.address.getValue[0].address_line2 }}
+          </td>
+          <td>
+            Cod. Postal: {{ order_entity.shipments.entity.shipping_profile.entity.address.getValue[0].postal_code }}
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <table class="table1">
+    <thead>
+    <tr class="line-order-elements-title">
+      <td class="title_total" >Ref.</td>
+      <td class="title_total">Descripción</td>
+      <td class="title_total">Cantidad</td>
+      <td class="title_total">Precio</td>
+      <td class="title_total">Total</td>
+    </tr>
+    </thead>
+    <tbody class="line-order-body">
+    {% for order_item in order_entity.getItems %}
+      {% set purchased_entity = order_item.getPurchasedEntity %}
+      <tr class="line_height">
+        <td>{{ purchased_entity.getSku }}</td>
+        <td><span>{{ order_item.label }}</span></td>
+        <td>{{ order_item.getQuantity|number_format }} x</td>
+        <td>{{ order_item.getUnitPrice|commerce_price_format }}</td>
+        <td>{{ order_item.getTotalPrice|commerce_price_format }}</td>
+      </tr>
+    {% endfor %}
+    <tr>
+      <td colspan="3" class="empty"></td>
+      <td class="title_total">
+        Subtotal
+      </td>
+      <td>{{ totals.subtotal|commerce_price_format }}</td>
+    </tr>
+    {% for adjustment in totals.adjustments %}
+      <tr>
+        <td colspan="3" class="empty"></td>
+        <td class="title_total">
+          {{ adjustment.label }}
+        </td>
+        <td>{{ adjustment.total|commerce_price_format }}</td>
+      </tr>
+    {% endfor %}
+    <tr>
+      <td colspan="3" class="empty"></td>
+      <td class="title_total">
+        Order Total
+      </td>
+      <td>{{ order_entity.getTotalPrice|commerce_price_format }}</td>
+    </tr>
+    </tbody>
+  </table>
+
+</section>
+<section>
+  <div class="titulo_comentarios_pedidos">Observaciones del pedido</div>
+  <div class="comentarios_pedidos">{{ order_entity.data.value.0.order_comment }}</div>
+</section>
+</body>
+</html>

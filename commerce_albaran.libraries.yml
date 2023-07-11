@@ -1,0 +1,7 @@
+entity-print-styling:
+  version: VERSION
+  css:
+    theme:
+      css/commerce_albaran.css: {}
+  dependencies:
+    - commerce_albaran/commerce_albaran

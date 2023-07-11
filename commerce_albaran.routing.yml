@@ -1,0 +1,18 @@
+commerce_view_albaran:
+  path: '/admin/commerce/orders/{commerce_order}/albaran'
+  defaults:
+    _title: 'Albaran'
+    _controller: '\Drupal\commerce_albaran\Controller\AlbaranController::viewAlbaran'
+  options:
+    parameters:
+      commerce_order:
+        type: entity:commerce_order
+  requirements:
+    _permission: 'view albaran'
+    commerce_order: \d+
+commerce_albaran.download_pdf:
+  path: '/download/pdf'
+  defaults:
+    _controller: '\Drupal\commerce_albaran\Controller\MyController::downloadPdf'
+  requirements:
+    _permission: 'access content'

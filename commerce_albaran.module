@@ -1,0 +1,48 @@
+<?php
+
+use Drupal\commerce_order\Entity\OrderTypeInterface;
+use Drupal\commerce_order\Plugin\Field\FieldFormatter\PriceCalculatedFormatter;
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Element;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\entity\BundleFieldDefinition;
+use Drupal\field\FieldStorageConfigInterface;
+use Drupal\profile\Entity\ProfileType;
+use Drupal\profile\Entity\ProfileTypeInterface;
+
+/**
+ * Implements hook_theme().
+ */
+function commerce_albaran_theme($existing, $type, $theme, $path) {
+  return [
+    'commerce_order_albaran' => [
+      'variables' => [
+        'order_entity' => NULL,
+        'billing_information' => NULL,
+        'shipping_information' => NULL,
+        'payment_method' => NULL,
+        'totals' => NULL,
+      ],
+    ],
+  ];
+}
+/**
+ * Implements hook_menu_local_actions_alter()
+ */
+function commerce_albaran_theme_suggestions_commerce_order_albaran(array $variables) {
+  $suggestions = [];
+  if (isset($variables['order_entity'])) {
+    $order = $variables['order_entity'];
+    $suggestions[] = $variables['theme_hook_original'] . '__' . $order->bundle();
+  }
+  return $suggestions;
+}
+function commerce_albaran_menu_local_actions_alter(&$local_actions) {
+  if (isset($local_actions['entity.commerce_order.resend_receipt_form'])) {
+    $local_actions['entity.commerce_order.resend_receipt_form']['appears_on'][] = 'commerce_view_receipt';
+  }
+}
+
